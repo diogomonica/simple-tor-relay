@@ -1,0 +1,40 @@
+- unless @configured
+  .alert.alert-danger
+    %strong This app has not been configured!
+    You need to edit the <code>config.yml</code> file before using this tool.
+
+%p
+  This is an <strong>experimental</strong> installer for getting apps running quickly on
+  <a href="#{SIGN_UP_URL}">DigitalOcean</a>.
+
+%h2 Install this app
+
+%p
+  Give it a try. Click the button below to install this app on a
+  DigitalOcean droplet in just a few minutes!
+
+%p
+  %a{ href: '/install?url=https://github.com/vlad902/simple-tor-relay' }
+    %img{ src: '/button.svg' }
+
+%h2 Install another app
+
+%p
+  Find an app that has an <code>app.yml</code> file on GitHub
+  (<a href="https://github.com/churchio/onebody">here</a> is an example)
+  and click the "Install on DigitalOcean" button in the README,
+  or paste the project URL below:
+
+%form{ action: '/install', method: 'GET' }
+  .row
+    .col-md-10
+      .form-group
+        %input.form-control#url{ name: 'url', value: params[:url], placeholder: 'https://github.com/org/app' }
+    .col-md-2
+      .form-group
+        %button.btn.btn-success{ style: 'margin-left:-25px' } Go!
+
+%p.discreet
+  This tool is built by people who love DigitalOcean, but it is not affiliated with DigitalOcean™ Inc.
+  If you have trouble using this tool, please do not contact DO for support.
+  Instead, you may <a href="https://github.com/seven1m/do-install-button/issues">file a bug</a>.

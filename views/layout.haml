@@ -1,0 +1,50 @@
+!!! html
+%html
+  %head
+    %meta{ charset: 'utf-8' }
+    %title Simple Tor Relay
+    %link{ rel: 'stylesheet', href: '//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css' }
+    %link{ rel: 'stylesheet', href: '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' }
+    %script{ src: '//code.jquery.com/jquery-2.1.1.min.js' }
+    :css
+      header { border-bottom: 1px solid #eee; }
+      main { margin-top: 25px; }
+      .room {
+        margin: 35px 5px;
+        padding: 0;
+        border: 1px solid #eee;
+        border-radius: 5px;
+      }
+      .room h2 {
+        margin: 0 0 15px 0;
+        padding: 5px 25px;
+        background-color: #eee;
+      }
+      .room .content {
+        padding: 25px;
+      }
+      .room button {
+        display: block;
+        width: 100%;
+      }
+      .discreet {
+        font-size: smaller;
+        color: #777;
+      }
+      pre.log {
+        margin-top: 15px;
+      }
+  %body
+    .row
+      .col-md-offset-4.col-md-4
+        %header
+          %h1.text-muted
+            %a{ href: '/' } Simple Tor Relay
+    %main
+      .row
+        .col-md-offset-4.col-md-4
+          = yield
+    .row
+      .col-md-offset-4.col-md-4
+        %p.discreet
+          The Simple Tor Relay is based on <a href="http://timmorgan.org">Tim Morgan</a>'s <a href="https://github.com/seven1m/do-install-button">Digital Ocean Install button</a>.

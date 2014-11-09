@@ -1,0 +1,91 @@
+%p
+  You can ssh into your new Droplet at: <code id="host">(waiting)</code>
+
+%p
+  You can <a id="console-link" href="#" target="_blank"><i class="fa fa-caret-square-o-right"></i> view the console</a> or just sit tight... we'll let you know when it's finished!
+
+%h2 Status
+
+.progress
+  .progress-bar.progress-bar-success.progress-bar-striped.active{ style: 'width:10%' }
+
+.status
+
+.go{ style: 'display:none;margin-top:25px;' }
+  %a.btn.btn-info.btn-lg{ href: '#' }
+    %i.fa.fa-arrow-circle-o-right
+    Go to your new app!
+
+:javascript
+  var last_pct = 0;
+  function progress(pct, active, type) {
+    pct = pct || last_pct;
+    last_pct = pct;
+    type = type || 'success';
+    $('.progress-bar').css('width', pct + '%');
+    $('.progress-bar').removeClass('progress-bar-success progress-bar-danger').addClass('progress-bar-' + type);
+    if (active) $('.progress-bar').addClass('active');
+    else $('.progress-bar').removeClass('active');
+  };
+
+  var updateDOStatus = function(delay) {
+    delay = delay || 10000;
+    $.ajax({
+      url: '/status.json',
+      dataType: 'json',
+      timeout: 5000,
+      success: function(data) {
+        if (data.ip) $('#host').text('root@' + data.ip);
+        if (data.id) $('#console-link').prop('href', 'https://cloud.digitalocean.com/droplets/' + data.id + '/console');
+        if (data.status == 'new') {
+          $('.status').text('creating droplet...');
+          progress(20, true);
+          setTimeout(updateDOStatus, 10000);
+        } else if (data.status == 'active') {
+          $('.status').text('starting droplet...');
+          progress(30, true);
+          updateDropletStatus(data.ip);
+        } else {
+          $('.status').text('There was an error. (status=' + data.status + ')');
+          progress(null, false, 'danger');
+        }
+      },
+      error: function(_xhr, status) {
+        setTimeout(function() { updateDOStatus(delay * 1.2) }, delay);
+      }
+    });
+  };
+
+  var updateDropletStatus = function(ip, delay) {
+    delay = delay || 10000;
+    var req = $.ajax({
+      url: 'http://' + ip + ':33333/status.jsonp?callback=?',
+      dataType: 'jsonp',
+      timeout: 5000,
+      success: function(data) {
+        if (data.status == 'installing') {
+          $('.status').text('installing software...');
+          progress(50, true);
+          setTimeout(function() { updateDropletStatus(ip) }, 10000);
+        } else if (data.status == 'error') {
+          $('.status').text('There was an error. Please check /var/log/cloud-init-output.log for more information.');
+          progress(null, false, 'danger');
+        } else if (data.status == 'complete') {
+          $('.status').text('finished!');
+          progress(100, false);
+          $('.go').show().find('a').prop('href', 'http://' + ip);
+        } else {
+          $('.status').text('There was an error. (status=' + data.status + ')');
+          progress(null, false, 'danger');
+        }
+      },
+      error: function(_xhr, status) {
+        setTimeout(function() { updateDropletStatus(ip, delay * 1.2) }, delay);
+      }
+    });
+  };
+
+  updateDOStatus();
+
+:css
+  .log { height: 300px; overflow: auto; }
