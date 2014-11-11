@@ -12,7 +12,7 @@
         %tr
           %th Bandwidth Cap:
           %td
-            %select{ name: 'bandwidth' }
+            %select{ name: 'size' }
               - @installer.bandwidth_options.each do |id, name|
                 %option{ value: id, selected: @installer.region == id }= name
         %tr
@@ -23,7 +23,7 @@
               - @installer.region_options.each do |id, name|
                 %option{ value: id, selected: random_region == id }= name
             .discreet
-              (These correspond to regions supported only regions supporting metadata and CloudConfig)
+              These correspond to DigitalOcean datacenters that support one click set-up.
         %tr
           %th Tor Node:
           %td
@@ -34,7 +34,15 @@
         %tr
           %th Node nickname:
           %td
-            %input{:type=>'text', :required => true, :value => "DO_#{rand(100000)}"}
+            %input{:type=>'text', :required => true, :value => "DigitalOcean_#{rand(100000)}"}
+            .discreet
+              Explanation of what this is
+        %tr
+          %th Email:
+          %td
+            %input{:type=>'text', :required => false}
+            .discreet
+              Optional: Explanation of ContactInfo
       .form-group
         %input#agree{ type: 'checkbox', name: 'agree' }
         %label{ for: 'agree' } I agree with the <a href="/terms">terms</a>.

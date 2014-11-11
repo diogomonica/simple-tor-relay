@@ -1,0 +1,28 @@
+Back-end:
+- Should we run a directory server too or just a router? Are directory servers also rate/total bandwidth limited?
+- Do we actually awnt to support rebooting upgrades like for kernels?
+- We need to set-up a relay and see how much bandwidth we can get through it, if we can't get 250KB/s we're going to ahve to limit ourselves to bridges.
+- Have an end-to-end test, for relays make sure the tor network can see it. Not sure what to do for bridges (look up log messages for private versus public)
+- Create a mechanism to report back GPG-encrypted error logs in case deployment fails over Tor (to not easily reveal possible bridge addresses to DPI)
+- "If your computer isn't running a webserver, and you haven't set AccountingMax, please consider changing your ORPort to 443 and/or your DirPort to 80." Why do 80/443 matter with AccountingMax?!
+
+Front-end:
+- The interface looks like shit and I've badly hacked up do-install-button, I'm not sure Tim's architecture is going to be exactly what we need. Might be worth cutting pieces out and making it less generic?
+- For bridges you can get bridge identifiers, we should support showing these to the client. The only shitty thing is if someone is sniffing on the network, they can find bridges by tracking what hosts contact us. Maybe the back-end code should only connect to our front-end over Tor?
+- Pass along advanced options for configuration to the install script
+- Right now we only support $5 and $10 nodes because $20 only offers 50% more bandwidth than $10. Would be nice to allow people to specify $20/month and have it spin up 2 $10 nodes.
+ + Automatically set Tor family in this case!
+ + In which use standard pricing diagram like http://designscrazed.org/html-css-pricing-table-templates/
+
+- Calls to action after proper set-up:
+ + (Relays) Set-up Tor Weather for monitoring
+ + Make it viral, give them something to tweet/share (without pulling in FB/twitter/etc. privacy nvasive trackers) that they set-up a Tor bridge/relay. For Relays, include a link to their node in the Tor Atlas if it updates that quickly? For bridges make sure they understand not to share their descriptor
+ + Explain Tor families and why they should set them if they run multiple nodes
+
+Operational:
+- Decide on domain, register, get SSL certs.
+- Web server config in front of sinatra with HSTS w/PFS ciphers + HPKP (!) + CSP (?)
+- Securely generate and share the trusted GPG key
+
+Documentation:
+- Clearly document privacy trade offs, make giving-up privacy disabled by default

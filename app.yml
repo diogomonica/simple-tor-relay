@@ -3,4 +3,4 @@ image: ubuntu-14-04-x64
 # TODO: GPG verify the install.sh file
 config:
   runcmd:
-    - curl https://raw.githubusercontent.com/vlad902/simple-tor-relay/installer.sh > installer.sh && sh installer.sh
+    - curl https://raw.githubusercontent.com/vlad902/simple-tor-relay/master/installer.sh > installer.sh && sh installer.sh

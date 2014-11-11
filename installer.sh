@@ -22,6 +22,7 @@ apt-get -y install tor tor-arm deb.torproject.org-keyring obfsproxy
 ### SET-UP AUTOMATIC UPDATES
 # https://help.ubuntu.com/community/AutomaticSecurityUpdates
 
+# TODO: Updates that require reboots?
 # TODO: Daily?
 cat > /etc/cron.weekly/apt-security-updates <<EOF
 echo "**************" >> /var/log/apt-security-updates
@@ -64,16 +65,16 @@ cat > /etc/network/if-pre-up.d/iptables <<EOF
 /sbin/iptables-restore < /etc/iptables.rules
 EOF
 chmod +x /etc/network/if-pre-up.d/iptables
-
-apt-get -y install ruby
+/etc/network/if-pre-up.d/iptables
 
 # Patch https://trac.torproject.org/projects/tor/ticket/13716
 echo 'signal (send) set=("term") peer="unconfined",' >>/etc/apparmor.d/local/system_tor
 apparmor_parser -r /etc/apparmor.d/system_tor
 
+apt-get -y install ruby
 # Use ERb templating to generate the torrc
 # TODO: Actually do DirPort? Is it covered under Accounting?
-ruby -rerb -rostruct -e 'puts ERB.new($stdin.read, nil, "-").result(OpenStruct.new(:config => ARGV[0], :bandwidth_cap => ARGV[1]).instance_eval { binding })' private_bridge 51200000 > /etc/tor/torrc <<EOF
+ruby -rerb -rostruct -e 'puts ERB.new($stdin.read, nil, "-").result(OpenStruct.new(:config => ARGV[0], :bandwidth_cap => ARGV[1]).instance_eval { binding })' private_bridge 1024 > /etc/tor/torrc <<EOF
 # Don't open a local SOCKS port, this host is just running a relay/bridge
 SocksPort 0
 
@@ -89,12 +90,13 @@ ORPort 0.0.0.0:9001 NoAdvertise
 
 # Cap our monthly bandwidth consumption so we don't go beyond 1/4 of our monthly allowance.
 AccountingStart month 1 00:00
-AccountingMax <%= bandwidth_cap.to_i / 2 %>b
+AccountingMax <%= bandwidth_cap.to_i / 2 %> GB
 # Should we even have this here? Do we care?
 BandwidthRate 1MB
 BandwidthBurst 1GB
 
 # TODO Nickname
+# TODO ContactInfo
 
 <% if config == 'private_bridge' || config == 'bridge' -%>
 # Bridge configuration
@@ -113,4 +115,4 @@ PublishServerDescriptor 0
 <% end -%>
 EOF
 
-service tor start
+service tor restart
