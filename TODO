@@ -5,6 +5,8 @@ Back-end:
 - Have an end-to-end test, for relays make sure the tor network can see it. Not sure what to do for bridges (look up log messages for private versus public)
 - Create a mechanism to report back GPG-encrypted error logs in case deployment fails over Tor (to not easily reveal possible bridge addresses to DPI)
 - "If your computer isn't running a webserver, and you haven't set AccountingMax, please consider changing your ORPort to 443 and/or your DirPort to 80." Why do 80/443 matter with AccountingMax?!
+- Is 1TB upload or download as well?
+- Add a swapfile? Would help w/ memory pressure, especially for 512mb nodes. Problem is most of the memory is consumed by the kernel and tor.
 
 Front-end:
 - The interface looks like shit and I've badly hacked up do-install-button, I'm not sure Tim's architecture is going to be exactly what we need. Might be worth cutting pieces out and making it less generic?
@@ -13,6 +15,7 @@ Front-end:
 - Right now we only support $5 and $10 nodes because $20 only offers 50% more bandwidth than $10. Would be nice to allow people to specify $20/month and have it spin up 2 $10 nodes.
  + Automatically set Tor family in this case!
  + In which use standard pricing diagram like http://designscrazed.org/html-css-pricing-table-templates/
+- Can we enable IPv6 by default?
 
 - Calls to action after proper set-up:
  + (Relays) Set-up Tor Weather for monitoring

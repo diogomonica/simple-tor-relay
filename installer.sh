@@ -88,7 +88,7 @@ ORPort 0.0.0.0:9001 NoAdvertise
 #DirPort 80 NoListen
 #DirPort 0.0.0.0:9030 NoAdvertise
 
-# Cap our monthly bandwidth consumption so we don't go beyond 1/4 of our monthly allowance.
+# Cap our monthly bandwidth consumption so we don't go beyond our monthly allowance.
 AccountingStart month 1 00:00
 AccountingMax <%= bandwidth_cap.to_i / 2 %> GB
 # Should we even have this here? Do we care?
