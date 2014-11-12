@@ -1,10 +1,7 @@
 Back-end:
-- Should we run a directory server too or just a router? Are directory servers also rate/total bandwidth limited?
-- Do we actually awnt to support rebooting upgrades like for kernels?
 - We need to set-up a relay and see how much bandwidth we can get through it, if we can't get 250KB/s we're going to ahve to limit ourselves to bridges.
 - Have an end-to-end test, for relays make sure the tor network can see it. Not sure what to do for bridges (look up log messages for private versus public)
 - Create a mechanism to report back GPG-encrypted error logs in case deployment fails over Tor (to not easily reveal possible bridge addresses to DPI)
-- "If your computer isn't running a webserver, and you haven't set AccountingMax, please consider changing your ORPort to 443 and/or your DirPort to 80." Why do 80/443 matter with AccountingMax?!
 - Is 1TB upload or download as well?
 - Add a swapfile? Would help w/ memory pressure, especially for 512mb nodes. Problem is most of the memory is consumed by the kernel and tor.
 
@@ -19,7 +16,9 @@ Front-end:
 
 - Calls to action after proper set-up:
  + (Relays) Set-up Tor Weather for monitoring
- + Make it viral, give them something to tweet/share (without pulling in FB/twitter/etc. privacy nvasive trackers) that they set-up a Tor bridge/relay. For Relays, include a link to their node in the Tor Atlas if it updates that quickly? For bridges make sure they understand not to share their descriptor
+ + Make it viral, give them something to tweet/share (without pulling in FB/twitter/etc. privacy nvasive trackers) that they set-up a Tor bridge/relay.
+  x For relays, offer to email a link with information about their Relay? Unfortunately Tor Atlas takes an hour to update and the initial stats are confusing because of the ramp-up. We could send a link and then explain why bandwidth will seem very low for 3 days
+  x For bridges make sure they understand not to share their descriptor
  + Explain Tor families and why they should set them if they run multiple nodes
 
 Operational:
