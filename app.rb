@@ -30,17 +30,8 @@ get '/terms' do
 end
 
 get '/install' do
-  begin
-    @installer = Installer.new(params[:url])
-  rescue Installer::URLParseError
-    haml :error_parsing_url
-  rescue Installer::ConfigFetchError
-    haml :error_getting_config
-  rescue Installer::ConfigParseError
-    haml :error_parsing_config
-  else
-    haml :install
-  end
+  @installer = Installer.new(params[:url])
+  haml :install
 end
 
 post '/install' do

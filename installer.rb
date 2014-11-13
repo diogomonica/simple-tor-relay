@@ -17,21 +17,11 @@ class Installer
     'LON1' => 'London 1'
   }
 
-  class URLParseError    < StandardError; end
-  class ConfigFetchError < StandardError; end
-  class ConfigParseError < StandardError; end
-
   attr_reader :raw_config, :droplet
   attr_accessor :url, :config, :size, :region, :auth_token, :droplet_id
 
   def initialize(url=nil)
-    return if url.to_s.strip == ''
-    (_, @user, @project) = GITHUB_PROJECT_REGEX.match(url).to_a
-    unless @user and @project
-      raise URLParseError.new("could not parse as a GitHub project url: #{url}")
-    end
-    @url = "https://raw.githubusercontent.com/#{@user}/#{@project}/master/app.yml"
-    get_config
+    @config = YAML.load(File.read('app.yml'))
   end
 
   def self.from_json(json)
@@ -127,20 +117,6 @@ class Installer
 
       payload['ssh_keys'] = [keys.first['id']] if keys.one? # TODO give the user a chance to select one if they have multiple keys
     end
-  end
-
-  def get_config
-    return if @url.to_s.strip == ''
-    @raw_config = RestClient.get(url)
-    begin
-      @config = YAML.load(@raw_config)
-    rescue
-      raise ConfigParseError.new("could not parse config from:\n\n#{@raw_config}")
-    else
-      @region = 'NYC3'
-    end
-  rescue RestClient::ResourceNotFound
-    raise ConfigFetchError.new("could not fetch config from #{@url}")
   end
 
   def set_status(status)
