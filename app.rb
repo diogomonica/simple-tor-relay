@@ -21,7 +21,7 @@ enable :show_exceptions if development?
 set :session_secret, config['cookie_secret']
 
 get '/' do
-  @configured = config['client_id'] != 'your-do-client-id'
+  @installer = Installer.new
   haml :index
 end
 
@@ -29,14 +29,9 @@ get '/terms' do
   haml :terms
 end
 
-get '/install' do
-  @installer = Installer.new(params[:url])
-  haml :install
-end
-
 post '/install' do
   begin
-    installer = Installer.new(params[:url])
+    installer = Installer.new
   rescue
     haml :error_generic
   else

@@ -2,8 +2,6 @@ require 'rest_client'
 require 'json'
 
 class Installer
-  GITHUB_PROJECT_REGEX = /github\.com\/([a-z0-9_-]+)\/([a-z0-9_-]+)/i
-
   BANDWIDTH_CAP = {
     '512mb' => '1TB/month ($5/month)',
     '1gb'   => '2TB/month ($10/month)'
@@ -17,10 +15,10 @@ class Installer
     'LON1' => 'London 1'
   }
 
-  attr_reader :raw_config, :droplet
+  attr_reader :droplet
   attr_accessor :url, :config, :size, :region, :auth_token, :droplet_id
 
-  def initialize(url=nil)
+  def initialize
     @config = YAML.load(File.read('app.yml'))
   end
 
