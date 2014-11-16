@@ -3,4 +3,10 @@ source 'https://rubygems.org'
 gem 'sinatra'
 gem 'haml'
 gem 'rest-client'
-gem 'pry', group: :development
+
+group :test, :development do
+  gem 'rack-test'
+  gem 'rspec'
+  gem 'pry'
+  gem 'webmock'
+end

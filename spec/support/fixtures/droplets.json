@@ -1,0 +1,12 @@
+{
+    "droplets": [
+        {
+            "name": "first.com",
+            "id": "ID1"
+        },
+        {
+            "name": "second.com",
+            "id": "ID2"
+        }
+    ]
+}
