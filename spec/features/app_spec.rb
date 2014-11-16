@@ -3,7 +3,7 @@ require 'json'
 
 RSpec.describe 'The Simple Tor Relay App', feature: true do
   let(:installer) {
-    installer = Installer.new("https://github.com/fake/project")
+    installer = Installer.new()
     installer.region = 'NYC3'
     installer.size = '512mb'
     installer.config = { size: installer.size, region: installer.region }
@@ -11,19 +11,13 @@ RSpec.describe 'The Simple Tor Relay App', feature: true do
     installer
   }
 
-  specify "the main page has content" do
+  specify "main page has content" do
     get '/'
     expect(last_response).to be_ok
     expect(last_response.body).to include('Simple Tor Relay')
   end
 
-  specify "the install page has content" do
-    get '/install'
-    expect(last_response).to be_ok
-    expect(last_response.body).to include('Set-up Tor node')
-  end
-
-  specify "the status page returns the status" do
+  specify "status page returns the status" do
     get '/status'
     expect(last_response).to be_ok
     expect(last_response.body).to include('Status')
@@ -31,7 +25,7 @@ RSpec.describe 'The Simple Tor Relay App', feature: true do
 
   specify "GET to /auth/callback calls installer and redirects to status" do
     expect(Installer).to receive(:from_json){ installer }
-    expect(installer).to receive(:auth_token=).with("FAKE_TOKEN")
+    expect(installer).to receive(:auth_token=).with('FAKE_TOKEN')
     expect(installer).to receive(:go!)
 
     get '/auth/callback'
@@ -42,6 +36,7 @@ RSpec.describe 'The Simple Tor Relay App', feature: true do
   end
 
   specify "POST to /install with no current session redirects to authorize" do
+    # Hack: given that installer uses .new, have to instantiate the object before stubbing
     installer  
     expect(Installer).to receive(:new) { installer }
 
@@ -53,9 +48,10 @@ RSpec.describe 'The Simple Tor Relay App', feature: true do
 
 
   specify "POST to /install with invalid session redirects to authorize" do
+    # Hack: given that installer uses .new, have to instantiate the object before stubbing
     installer
     expect(Installer).to receive(:new) { installer }
-    expect(installer).to receive(:auth_token) { "FAKE_TOKEN" }
+    expect(installer).to receive(:auth_token) { 'FAKE_TOKEN' }
     expect(installer).to receive(:go!) { raise RestClient::Unauthorized }
 
     post '/install'
@@ -65,11 +61,11 @@ RSpec.describe 'The Simple Tor Relay App', feature: true do
   end
 
   specify "POST to /install with existing session redirects to status" do
+    # Hack: given that installer uses .new, have to instantiate the object before stubbing
     installer
     expect(Installer).to receive(:new) { installer }
-    expect(installer).to receive(:auth_token) { "FAKE_TOKEN" }
+    expect(installer).to receive(:auth_token) { 'FAKE_TOKEN' }
     expect(installer).to receive(:go!)
-
 
     post '/install'
     expect(last_response).to be_redirect

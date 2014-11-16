@@ -42,9 +42,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    stub_request(:get, /raw.githubusercontent.com/).
-      to_return(status: 200, body: YAML.dump({name: "diogo", image: "image", config: {runcmd: "fake_cmd"}}), headers: {})
-
     stub_request(:any, /api.digitalocean.com/).to_rack(FakeDigitalOcean)
     # stub_request(:post, "https://api.digitalocean.com/v2/droplets").
     #   to_return(:status => 200, :body => "", :headers => {})

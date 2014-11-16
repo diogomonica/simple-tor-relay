@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe 'The installer' do
   let(:installer) {
-    installer = Installer.new("https://github.com/fake/project")
+    installer = Installer.new()
     installer.region = 'NYC3'
     installer.size = '512mb'
     installer.config = { size: installer.size, region: installer.region }
