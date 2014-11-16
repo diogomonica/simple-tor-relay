@@ -42,7 +42,7 @@ class Installer
   end
 
   def merged_config
-    config.merge(
+    @config.merge(
       'region' => @region,
       'size' => @size
     )

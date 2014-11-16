@@ -38,7 +38,8 @@ post '/install' do
     installer.region = params[:region]
     installer.size = params[:size]
     session[:config] = installer.as_json
-    if installer.auth_token = session[:token]
+    installer.auth_token = session[:token]
+    if installer.auth_token
       begin
         installer.go!
       rescue RestClient::Unauthorized
